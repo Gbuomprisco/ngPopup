@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>ngPopup example</title>
+        <link rel="stylesheet" href="../../lib/css/ngPopup.css"/>
+    </head>
+    <body>
+        <h1>ngPopup Example</h1>
+        <div ng-app="ngPopup">
+            <ng-popup auto="true" template="../../src/templates/ngPopup.html">
+                <ng-popup-header template="../../src/templates/ngPopupHeader.html">Lorem Ipsum</ng-popup-header>
+                <ng-popup-content template="../../src/templates/ngPopupContent.html">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </ng-popup-content>
+                <ng-popup-controls template="../../src/templates/ngPopupControls.html"></ng-popup-controls>
+            </ng-popup>
+        </div>
+    </body>
+    <script src="../../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../../bower_components/angular/angular.js"></script>
+    <script src="../../src/js/ngPopup.js"></script>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "ngPopup",
+  "description": "",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Gbuomprisco/ngPopup",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "angular": "1.2.x",
+    "jquery": "2.1.1"
+  }
+}
