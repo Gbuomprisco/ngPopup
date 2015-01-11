@@ -25,9 +25,7 @@
          */
         var controller = function ($scope, $element, $attrs) {
             $.extend($scope, defaults, $attrs);
-            if (controllerFunction && typeof controllerFunction === "function") {
-                controllerFunction.call(this, $scope, $element, $attrs);
-            }
+            return controllerFunction && controllerFunction.call(this, $scope, $element, $attrs) || $.noop;
         },
             /**
              * link function
@@ -37,7 +35,7 @@
              * @returns {*}
              */
             link = function (scope, elem, attrs, requiredController) {
-                return linkFunction.call(this, scope, elem, attrs, requiredController);
+                return linkFunction && linkFunction.call(this, scope, elem, attrs, requiredController) || $.noop;
             },
             /**
              * if template has not been defined via attribute, get the default one
@@ -73,6 +71,7 @@
                     body = element.find('.ng-popup__body'),
                     className = 'hidden',
                     animate = $scope.animate,
+                    auto = $scope.auto,
                     ms = animate === "true" ? +$scope.animationDuration : 0;
 
                 /**
@@ -101,8 +100,22 @@
                 /**
                  * if auto is true, show the modal immediately
                  */
-                if (!!$scope.auto) {
-                    $scope.show();
+                if (auto === "true") {
+                    $scope.show.call();
+                } else if (auto === "false")  {
+                    /**
+                     * jQuery reference to modal trigger
+                     * @type {*|HTMLElement}
+                     */
+                    var trigger = $($scope.trigger);
+                    if (trigger.length) {
+                        /**
+                         * call show function on click
+                         */
+                        trigger.on('click', function () {
+                            $scope.show.call();
+                        });
+                    }
                 }
             };
 
