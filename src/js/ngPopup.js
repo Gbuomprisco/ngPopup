@@ -10,14 +10,13 @@
     "use strict";
 
     /**
-     *
+     * createDirective function, reuse same code to create a directive with different options
      * @param defaults
      * @param linkFunction
      * @returns {{restrict: string, transclude: boolean, replace: boolean,
       * link: (*|boolean), controller: Function, templateUrl: Function}}
      */
-    var createDirective = function (defaults, linkFunction, controllerFunction) {
-
+    var createDirective = function (defaults, linkFunction, controllerFunction, require) {
         /**
          * controller extends scope
          * @param $scope
@@ -31,11 +30,14 @@
             }
         },
             /**
-             *
+             * link function
+             * @param scope
+             * @param elem
+             * @param attrs
              * @returns {*}
              */
-            link = function (scope, elem, attrs) {
-                return linkFunction.call(this, scope, elem, attrs);
+            link = function (scope, elem, attrs, requiredController) {
+                return linkFunction.call(this, scope, elem, attrs, requiredController);
             },
             /**
              * if template has not been defined via attribute, get the default one
@@ -52,6 +54,7 @@
             transclude: true,
             controller: controller,
             link: link,
+            require: require,
             templateUrl: template
         }
     },
@@ -59,6 +62,50 @@
          * ngPopup Directive
          */
         ngPopup = function () {
+
+            /**
+             * @controller
+             * @param scope
+             * @param elem
+             */
+            var controller = function ($scope, $elem) {
+                var element = $elem.find('.ng-popup'),
+                    body = element.find('.ng-popup__body'),
+                    className = 'hidden',
+                    animate = $scope.animate,
+                    ms = animate === "true" ? +$scope.animationDuration : 0;
+
+                /**
+                 * method to show modal
+                 */
+                $scope.show = function () {
+                    element.removeClass(className);
+                    body.animate({
+                        top: "25%",
+                        opacity: 1
+                    }, ms);
+                };
+
+                /**
+                 * method to hide modal
+                 */
+                $scope.hide = function () {
+                    body.animate({
+                        top: "-25%",
+                        opacity: 0
+                    }, ms, function(){
+                        element.remove();
+                    });
+                };
+
+                /**
+                 * if auto is true, show the modal immediately
+                 */
+                if (!!$scope.auto) {
+                    $scope.show();
+                }
+            };
+
             return createDirective({
                 auto: false,
                 trigger: "",
@@ -66,7 +113,7 @@
                 animationDuration: 450,
                 template: "templates/ngPopup.html",
                 background: true
-            }, $.noop);
+            }, $.noop, controller);
         },
         /**
          * ngPopupHeader directive
@@ -74,7 +121,7 @@
         ngPopupHeader = function () {
             return createDirective({
                 template: "templates/ngPopupHeader.html"
-            }, $.noop);
+            });
         },
         /**
          * ngPopupContent directive
@@ -82,50 +129,37 @@
         ngPopupContent = function () {
             return createDirective({
                 template: "templates/ngPopupContent.html"
-            }, $.noop);
+            });
         },
         /**
          * ngPopupControls directive
          */
         ngPopupControls = function () {
-            return createDirective({
-                template: "templates/ngPopupControls.html",
-                useCancelButton: true,
-                buttonLabel: "Click"
-            }, $.noop);
-        },
+            var link = function (scope, elem) {
+                var callback = scope.ngPopupCallback;
+                if (callback && typeof callback === "function") {
+                    elem.find('.ng-popup__button').on('click', function () {
+                        scope.ngPopupCallback.call();
+                    });
+                }
 
-        ngPopupCancelButton = function () {
-            var controller = function ($scope, $elem, $attrs) {
-                $scope.closePopup = function () {
-                    $elem.closest('.ng-popup').remove();
+                scope.closePopup = function () {
+                    scope.$parent.hide.call();
                 };
             };
 
             return createDirective({
-                template: "../../src/templates/ngPopupCancelButton.html",
-                buttonLabel: "Cancel"
-            }, $.noop, controller);
-        },
-
-        ngPopupActionButton = function () {
-            var link = function (scope, elem) {
-                elem.on('click', function () {
-                   scope.callback.call();
-                    console.log('ciao')
-                });
-            };
-            return createDirective({
-                template: "../../src/templates/ngPopupActionButton.html",
+                template: "templates/ngPopupControls.html",
+                useCancelButton: true,
                 buttonLabel: "Click",
-                callback: "callback"
+                buttonCancelLabel: "Cancel"
             }, link);
         };
 
     /**
      * creating module
      */
-    angular.module('ngPopup', [])
+    angular.module('ngPopupModule', [])
     /**
      * defining directives
      */
@@ -133,8 +167,6 @@
         .directive('ngPopupHeader', ngPopupHeader)
         .directive('ngPopupContent', ngPopupContent)
         .directive('ngPopupControls', ngPopupControls)
-        .directive('ngPopupCancelButton', ngPopupCancelButton)
-        .directive('ngPopupActionButton', ngPopupActionButton)
     /**
      * debug, to be deleted
      */

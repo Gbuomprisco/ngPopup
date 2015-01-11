@@ -1,6 +1,10 @@
 <div class="ng-popup__controls">
-    <ng-popup-action-button></ng-popup-action-button>
+    <button class="ng-popup__button">
+        {{ buttonLabel }}
+    </button>
     <div ng-if="useCancelButton">
-        <ng-popup-cancel-button></ng-popup-cancel-button>
+        <button class="ng-popup__cancel" ng-click="closePopup()">
+            {{ buttonCancelLabel }}
+        </button>
     </div>
 </div>

@@ -5,14 +5,15 @@
   position: fixed;
   top: 0;
   left: 0; }
-  .ng-popup.ng-popup-hidden {
+  .ng-popup.hidden {
     display: none; }
   .ng-popup.ng-popup-background {
     background: rgba(30, 30, 30, 0.74); }
   .ng-popup .ng-popup__body {
     background: white;
     position: fixed;
-    top: 20%;
+    top: -50%;
+    opacity: 0;
     border-radius: 1px;
     left: 35%;
     width: 400px;
