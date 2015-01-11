@@ -33,7 +33,6 @@ Attributes:
 
 #### ngPopupControls
 The controls directive: provides elements to fire actions
-The header directive: provides the content for the header
 Attributes:
 - template (String): specifies the location of the template
 - useCancelButton (true|false): specifies whether use the button to close the popup or not
