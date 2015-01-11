@@ -46,12 +46,12 @@ To create a function to be fired when clicking on the action button, you can do 
 - extend the scope with the function ngPopupCallback
 
 
-    var app = angular.module('ngPopupModule');
-    app.controller('example', function ($scope) {
-       $scope.ngPopupCallback = function () {
-           alert("I've been fired!");
-       };
-    });
+        var app = angular.module('ngPopupModule');
+        app.controller('example', function ($scope) {
+           $scope.ngPopupCallback = function () {
+               alert("I've been fired!");
+           };
+        });
     
 
 #### Example
