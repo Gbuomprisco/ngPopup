@@ -80,9 +80,10 @@
                 $scope.show = function () {
                     element.removeClass(className);
                     body.animate({
-                        top: "25%",
+                        top: "20%",
                         opacity: 1
                     }, ms);
+                    element.show();
                 };
 
                 /**
@@ -93,7 +94,7 @@
                         top: "-25%",
                         opacity: 0
                     }, ms, function(){
-                        element.remove();
+                        element.hide();
                     });
                 };
 
